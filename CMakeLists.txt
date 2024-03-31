@@ -7,9 +7,12 @@ project(line-follower)
 
 pico_sdk_init()
 
-add_executable(line-follower src/main.c)
+add_executable(line-follower
+	src/main.c
+	src/mux.c
+)
 
-target_link_libraries(line-follower pico_stdlib)
+target_link_libraries(line-follower pico_stdlib hardware_adc)
 
 # Enable serial output via USB instead of UART
 pico_enable_stdio_usb(line-follower ON)
