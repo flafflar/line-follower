@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 include(cmake/pico_sdk_import.cmake)
+include(cmake/picotool.cmake)
 
 project(line-follower)
 
@@ -15,3 +16,5 @@ pico_enable_stdio_usb(line-follower ON)
 pico_enable_stdio_uart(line-follower OFF)
 
 pico_add_extra_outputs(line-follower)
+
+picotool_flash_target(line-follower)
