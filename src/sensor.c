@@ -16,6 +16,12 @@ void sensor_normalize(
 ) {
     uint16_t factor = 65535 / (int) (max - min);
     for (int s = 0; s < 8; s++) {
-        norm[s] = (values[s] - min) * factor;
+        if (values[s] <= min) {
+            norm[s] = 0;
+        } else if (values[s] >= max) {
+            norm[s] = 65535;
+        } else {
+            norm[s] = (values[s] - min) * factor;
+        }
     }
 }
