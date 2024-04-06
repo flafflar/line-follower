@@ -23,12 +23,12 @@ int main(void) {
 
 	wait_usr();
 	uint16_t light_cal[8];
-	uint16_t min = sensor_calibrate(256, light_cal);
+	uint16_t min = sensor_calibrate(16384, light_cal);
 	printf("Min: %d\n", min);
 
 	wait_usr();
 	uint16_t dark_cal[8];
-	uint16_t max = sensor_calibrate(256, dark_cal);
+	uint16_t max = sensor_calibrate(16384, dark_cal);
 	printf("Max: %d\n", max);
 
 	while (true) {
@@ -39,6 +39,7 @@ int main(void) {
 		for (int s = 0; s < 8; s++) {
 			printf("%05d ", sensor[s]);
 		}
+		printf("%05f", sensor_calculate_center(sensor));
 		printf("\r");
 
 		sleep_ms(100);
