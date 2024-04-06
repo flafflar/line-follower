@@ -47,3 +47,13 @@ void sensor_apply_calibration(
     uint16_t max[8],
     uint16_t calibrated[8]
 );
+
+/**
+ * Attempts to find the center point of the black points seen by the sensor
+ * array.
+ *
+ * @param values The calibrated sensor values.
+ * @returns A value between 0 and 7 indicating the estimated position of the
+ * center relative to the positions of the individual sensors.
+*/
+float sensor_calculate_center(uint16_t values[8]);
