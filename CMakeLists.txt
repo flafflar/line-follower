@@ -11,6 +11,7 @@ add_executable(line-follower
 	src/main.c
 	src/mux.c
 	src/sensor.c
+	src/pid.c
 )
 
 target_link_libraries(line-follower pico_stdlib hardware_adc)
