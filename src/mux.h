@@ -3,9 +3,9 @@
  */
 #include <stdint.h>
 
-#define MUX_S0_PIN 12
+#define MUX_S0_PIN 10
 #define MUX_S1_PIN 11
-#define MUX_S2_PIN 10
+#define MUX_S2_PIN 12
 
 #define MUX_OUT_PIN 26
 
