@@ -105,6 +105,15 @@ float sensor_calculate_center(uint16_t values[8]) {
         derivative[i] = norm[i] - norm[i - 1];
     }
 
+    // The derivative of the first point is always 0 since there is no other
+    // point previous to it. If the peak value is somewhere near sensor 0, the
+    // second derivative is used to give the missing derivative a better value
+    float second_derivative_0 = derivative[1] - derivative[0];
+    float second_derivative_1 = derivative[2] - derivative[1];
+    if (second_derivative_1 < 0 && second_derivative_1 < second_derivative_0) {
+        derivative[0] = derivative[1] - second_derivative_1;
+    }
+
     // Calculate the points at which the derivative of the function is zero
     // The derivative is assumed to be piecewise linear
     float zeroes[8];
