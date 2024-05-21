@@ -92,17 +92,27 @@ static float x_intercept(float x1, float y1, float x2, float y2) {
     return x1 - y1 * (x2 - x1) / (y2 - y1);
 }
 
-float sensor_calculate_center(uint16_t values[8]) {
-    // Normalize the values as floats in the range 0-1
-    float norm[8];
-    for (int s = 0; s < 8; s++) {
-        norm[s] = values[s] / 65535.0;
-    }
-
+/**
+ * Finds the fractional index at which the function defined by the given points
+ * has its maximum value.
+ *
+ * @param valyes The values of the function to find the peak.
+ * @returns The index of the peak.
+ */
+static float find_peak(float values[8]) {
     // Calculate the numeric derivative of the values
     float derivative[8] = {[0] = 0}; // Set the initial value to zero
     for (int i = 1; i < 8; i++) {
-        derivative[i] = norm[i] - norm[i - 1];
+        derivative[i] = values[i] - values[i - 1];
+    }
+
+    // The derivative of the first point is always 0 since there is no other
+    // point previous to it. If the peak value is somewhere near sensor 0, the
+    // second derivative is used to give the missing derivative a better value
+    float second_derivative_0 = derivative[1] - derivative[0];
+    float second_derivative_1 = derivative[2] - derivative[1];
+    if (second_derivative_1 < 0 && second_derivative_1 < second_derivative_0) {
+        derivative[0] = derivative[1] - second_derivative_1;
     }
 
     // The derivative of the first point is always 0 since there is no other
@@ -138,7 +148,7 @@ float sensor_calculate_center(uint16_t values[8]) {
         // be scaled, the subtraction is enough
         float t = zeroes[i] - s;
 
-        critical[i] = lerp(norm[s], norm[s + 1], t);
+        critical[i] = lerp(values[s], values[s + 1], t);
     }
 
     // Find the maximum of the critical points
@@ -152,4 +162,33 @@ float sensor_calculate_center(uint16_t values[8]) {
 
     // Return the x value of the maximum point
     return x_max;
+}
+
+float sensor_calculate_center(uint16_t values[8]) {
+    // Normalize the values as floats in the range 0-1
+    float norm[8];
+    for (int s = 0; s < 8; s++) {
+        norm[s] = values[s] / 65535.0;
+    }
+
+    // Flip the values so they go left-to-right
+    float norm_flipped[8];
+    for (int s = 0; s < 8; s++) {
+        norm_flipped[7 - s] = norm[s];
+    }
+
+    // Calculate the center (which is the point that the sensor value peaks)
+    // starting from the left
+    float center_r = find_peak(norm);
+    // Calculate the center, this time starting from the right
+    float center_l = 8.0f - find_peak(norm_flipped);
+    // Average the two centers
+    float center_avg = (center_r + center_l) / 2.0f;
+
+    // Return the calculated center depending on which side it is located
+    if (center_avg < 3.5) {
+        return center_r / 8.0f * 7.0f;
+    } else {
+        return center_l / 8.0f * 7.0f;
+    }
 }
