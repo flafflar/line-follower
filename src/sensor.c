@@ -115,15 +115,6 @@ static float find_peak(float values[8]) {
         derivative[0] = derivative[1] - second_derivative_1;
     }
 
-    // The derivative of the first point is always 0 since there is no other
-    // point previous to it. If the peak value is somewhere near sensor 0, the
-    // second derivative is used to give the missing derivative a better value
-    float second_derivative_0 = derivative[1] - derivative[0];
-    float second_derivative_1 = derivative[2] - derivative[1];
-    if (second_derivative_1 < 0 && second_derivative_1 < second_derivative_0) {
-        derivative[0] = derivative[1] - second_derivative_1;
-    }
-
     // Calculate the points at which the derivative of the function is zero
     // The derivative is assumed to be piecewise linear
     float zeroes[8];
@@ -166,9 +157,18 @@ static float find_peak(float values[8]) {
 
 float sensor_calculate_center(uint16_t values[8]) {
     // Normalize the values as floats in the range 0-1
+    // Also calculate the maximum value
     float norm[8];
+    float max = 0;
     for (int s = 0; s < 8; s++) {
         norm[s] = values[s] / 65535.0;
+	if (norm[s] > max) max = norm[s];
+    }
+
+    // If there are only small values, the sensor probably sees only white, so
+    // return an invalid value
+    if (max < 0.5) {
+        return -1.0f;
     }
 
     // Flip the values so they go left-to-right

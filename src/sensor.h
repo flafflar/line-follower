@@ -54,6 +54,7 @@ void sensor_apply_calibration(
  *
  * @param values The calibrated sensor values.
  * @returns A value between 0 and 7 indicating the estimated position of the
- * center relative to the positions of the individual sensors.
+ * center relative to the positions of the individual sensors, or -1 if there
+ * is no black line detected by the sensor.
 */
 float sensor_calculate_center(uint16_t values[8]);
