@@ -157,9 +157,18 @@ static float find_peak(float values[8]) {
 
 float sensor_calculate_center(uint16_t values[8]) {
     // Normalize the values as floats in the range 0-1
+    // Also calculate the maximum value
     float norm[8];
+    float max = 0;
     for (int s = 0; s < 8; s++) {
         norm[s] = values[s] / 65535.0;
+	if (norm[s] > max) max = norm[s];
+    }
+
+    // If there are only small values, the sensor probably sees only white, so
+    // return an invalid value
+    if (max < 0.5) {
+        return -1.0f;
     }
 
     // Flip the values so they go left-to-right
