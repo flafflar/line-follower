@@ -157,11 +157,17 @@ static float find_peak(float values[8]) {
 
 float sensor_calculate_center(uint16_t values[8]) {
     // Normalize the values as floats in the range 0-1
-    // Also calculate the maximum value
     float norm[8];
-    float max = 0;
     for (int s = 0; s < 8; s++) {
         norm[s] = values[s] / 65535.0;
+    }
+
+    // Sensor #3 is broken, so take the average of the two sensors next to it
+    norm[2] = (norm[1] + norm[3]) / 2;
+
+    // Also calculate the maximum value
+    float max = 0;
+    for (int s = 0; s < 8; s++) {
         if (norm[s] > max) max = norm[s];
     }
 
