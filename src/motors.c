@@ -1,6 +1,10 @@
 #include "motors.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
+
+const float MAX_SPEED = 65535;
+const float TARGET_SPEED = 16000;
+
 /**
  * Left motor PWM GPIO15
  * Left motor GND GPIO14
@@ -53,12 +57,18 @@ void drive_left_motor(uint16_t speed){
 	pwm_set_chan_level(slice15, channel15, speed);
 }
 
+static float normalize_speed(float speed) {
+    if (speed > MAX_SPEED) {
+        return MAX_SPEED;
+    } else if (speed < 0) {
+        return 0;
+    }
+    return speed;
+}
+
 void drive_motors(int16_t speed){
-	if (speed >= 0){
-		drive_right_motor(65535);
-		drive_left_motor(65535 - 2*speed);
-	} else {
-		drive_left_motor(65535);
-		drive_right_motor(65535 + 2*speed);
-	}
+    float left_speed = normalize_speed(TARGET_SPEED - speed);
+    float right_speed = normalize_speed(TARGET_SPEED + speed);
+    drive_left_motor(left_speed);
+    drive_right_motor(right_speed);
 }
