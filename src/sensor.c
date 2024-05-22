@@ -162,7 +162,7 @@ float sensor_calculate_center(uint16_t values[8]) {
     float max = 0;
     for (int s = 0; s < 8; s++) {
         norm[s] = values[s] / 65535.0;
-	if (norm[s] > max) max = norm[s];
+        if (norm[s] > max) max = norm[s];
     }
 
     // If there are only small values, the sensor probably sees only white, so
