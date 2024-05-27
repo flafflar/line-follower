@@ -3,9 +3,9 @@
 #include "mux.h"
 
 void sensor_read(uint16_t values[8]) {
-    for (int ch = 0; ch < 8; ch++) {
-        values[ch] = mux_read(ch);
-    }
+    values[0] = mux_read(0);
+    values[4] = mux_read(4);
+    values[7] = mux_read(7);
 }
 
 void sensor_normalize(
@@ -153,42 +153,4 @@ static float find_peak(float values[8]) {
 
     // Return the x value of the maximum point
     return x_max;
-}
-
-float sensor_calculate_center(uint16_t values[8]) {
-    // Normalize the values as floats in the range 0-1
-    // Also calculate the maximum value
-    float norm[8];
-    float max = 0;
-    for (int s = 0; s < 8; s++) {
-        norm[s] = values[s] / 65535.0;
-	if (norm[s] > max) max = norm[s];
-    }
-
-    // If there are only small values, the sensor probably sees only white, so
-    // return an invalid value
-    if (max < 0.5) {
-        return -1.0f;
-    }
-
-    // Flip the values so they go left-to-right
-    float norm_flipped[8];
-    for (int s = 0; s < 8; s++) {
-        norm_flipped[7 - s] = norm[s];
-    }
-
-    // Calculate the center (which is the point that the sensor value peaks)
-    // starting from the left
-    float center_r = find_peak(norm);
-    // Calculate the center, this time starting from the right
-    float center_l = 8.0f - find_peak(norm_flipped);
-    // Average the two centers
-    float center_avg = (center_r + center_l) / 2.0f;
-
-    // Return the calculated center depending on which side it is located
-    if (center_avg < 3.5) {
-        return center_r / 8.0f * 7.0f;
-    } else {
-        return center_l / 8.0f * 7.0f;
-    }
 }
