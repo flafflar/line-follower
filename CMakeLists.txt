@@ -15,7 +15,7 @@ add_executable(line-follower
 	src/motors.c
 )
 
-target_link_libraries(line-follower pico_stdlib hardware_adc hardware_pwm)
+target_link_libraries(line-follower pico_stdlib hardware_adc hardware_pwm pico_multicore)
 
 # Enable serial output via USB instead of UART
 pico_enable_stdio_usb(line-follower ON)
