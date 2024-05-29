@@ -3,9 +3,9 @@
 #include "mux.h"
 
 void sensor_read(uint16_t values[8]) {
-    for (int ch = 0; ch < 8; ch++) {
-        values[ch] = mux_read(ch);
-    }
+    values[0] = mux_read(0);
+    values[4] = mux_read(4);
+    values[7] = mux_read(7);
 }
 
 void sensor_normalize(

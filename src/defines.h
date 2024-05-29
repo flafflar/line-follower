@@ -1,0 +1,9 @@
+#define Kp 4200
+#define Ki 0
+#define Kd 1400
+#define INTEGRAL_LIMIT 1000
+#define TARGET_SPEED 27000
+#define MAX_SPEED 40000
+#define USE_CALIBRATION true
+#define MAX_REVERSE_SPEED 16000
+#define OUTER_SENSOR_OFFSET 11.0

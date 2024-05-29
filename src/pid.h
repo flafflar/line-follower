@@ -11,4 +11,4 @@
  * add the value from the right motor.
  */
 
-float pid(float offset);
+float pid(uint16_t values[8]);
