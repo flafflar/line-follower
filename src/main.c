@@ -68,11 +68,18 @@ int main(void) {
 	multicore_launch_core1(core1_main);
 	wait_usr();
 
+
 	while (true) {
-        uint16_t sensor[8];
-        sensor[0] = current_sensor_array[0];
-        sensor[4] = current_sensor_array[4];
-		sensor[7] = current_sensor_array[7];
+            uint16_t sensor[8];
+   	    sensor[0] = current_sensor_array[0];
+            sensor[4] = current_sensor_array[4];
+	    sensor[7] = current_sensor_array[7];
+
+	    if (sensor[0] > BLACK_THRESHOLD && sensor[4] > BLACK_THRESHOLD && sensor[7] > BLACK_THRESHOLD) {
+		    drive_left_motor(0);
+		    drive_right_motor(0);
+		    break;
+	}
 
         float speed = pid(sensor);
         drive_motors(speed);
