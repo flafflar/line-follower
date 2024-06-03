@@ -59,7 +59,7 @@ void setup_motors (){
 void drive_right_motor(double speed){
 	if (speed > MAX_SPEED){
 		speed = MAX_SPEED;
-	} 
+	}
 	else if (speed < 0){
 		if (-speed > MAX_REVERSE_SPEED){
 			speed = -MAX_REVERSE_SPEED;
@@ -83,7 +83,7 @@ void drive_right_motor(double speed){
 void drive_left_motor(double speed){
 	if (speed > MAX_SPEED){
 		speed = MAX_SPEED;
-	} 
+	}
 	else if (speed < 0){
 		if (-speed > MAX_REVERSE_SPEED){
 			speed = -MAX_REVERSE_SPEED;

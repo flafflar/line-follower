@@ -64,7 +64,7 @@ int main(void) {
 	for (int i = 0; i < 8; i++) {
         printf("Light: %d, Dark: %d\n", light_cal[i], dark_cal[i]);
     }
-	
+
 	multicore_launch_core1(core1_main);
 	wait_usr();
 

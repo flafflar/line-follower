@@ -35,7 +35,7 @@ uint16_t mux_read(unsigned int channel) {
 	// The propagation delay of the chip is at most 1us, so wait for that
 	// time before reading
 	sleep_us(1);
-	
+
 	// Read the analog value from the common output
 	return adc_read();
 }

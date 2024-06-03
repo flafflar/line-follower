@@ -5,7 +5,7 @@
 float pid(uint16_t values[8]) {
     /*
     A0 A1 -- -- A4 A5 A6 A7
-    A4 will be used for pid and A0 and A7 will be used for extreme cases. It will stop the appropriate motor. 
+    A4 will be used for pid and A0 and A7 will be used for extreme cases. It will stop the appropriate motor.
     */
     static float integral = 0;
     static float prev_error = 0;
